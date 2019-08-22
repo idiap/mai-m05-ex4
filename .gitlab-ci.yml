@@ -1,0 +1,10 @@
+stages:
+  - build
+
+build:
+  tags:
+  - docker
+  image: fspr/lab:2019
+  stage: build
+  script:
+    - nosetests -sv
