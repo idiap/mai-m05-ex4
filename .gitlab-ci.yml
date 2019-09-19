@@ -10,4 +10,10 @@ build:
     - source $CONDA_DIR/etc/profile.d/conda.sh
     - conda activate fspr
   script:
-    - nosetests --with-coverage -sv --cover-package=.
+    - coverage run test.py
+    - coverage html
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - htmlcov
+
