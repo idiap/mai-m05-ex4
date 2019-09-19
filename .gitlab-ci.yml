@@ -10,4 +10,4 @@ build:
     - source $CONDA_DIR/etc/profile.d/conda.sh
     - conda activate fspr
   script:
-    - nosetests --with-coverage -sv
+    - nosetests --with-coverage -sv --cover-package=.
