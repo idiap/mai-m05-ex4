@@ -6,5 +6,8 @@ build:
     - docker
   image: fspr/lab:2019
   stage: build
+  before_script:
+    - source $CONDA_DIR/etc/profile.d/conda.sh
+    - conda activate fspr
   script:
     - nosetests --with-coverage -sv --cover-package=.
