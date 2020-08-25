@@ -140,7 +140,7 @@ class MultiClassTrainer:
       machines = []
       for k in range(len(X)):
         NC_range = list(range(0,k)) + list(range(k+1,len(X)))
-        Xp = numpy.array([numpy.vstack(X[NC_range]), X[k]])
+        Xp = [numpy.vstack(X[NC_range]), X[k]]
         machines.append(_trainer.train(Xp))
 
       return MultiClassMachine(machines)
