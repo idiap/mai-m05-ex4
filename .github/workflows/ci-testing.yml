@@ -1,4 +1,4 @@
-name: Continuous Integration Example
+name: Continuous Integration
 
 on:  # Define here when your project will be tested
   push:               # all branches are tested on pushes to the repo
@@ -16,6 +16,7 @@ jobs:
     # -- including OS variations (e.g. windows, macos, etc).
     # -- The executor will combine all possible values together
     strategy:
+      fail-fast: false  # avoids cancelled builds if the other fails
       matrix:
         python-version: ["3.8", "3.9"]
 
@@ -37,7 +38,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           auto-update-conda: true
           auto-activate-base: false
-          activate-environment: site
+          activate-environment: project
           environment-file: environment.yml
 
       # Default action: run something
