@@ -1,0 +1,57 @@
+name: Continuous Integration Example
+
+on:  # Define here when your project will be tested
+  push:               # all branches are tested on pushes to the repo
+  pull_request:       # all pull-requests will be tested
+  workflow_dispatch:  # this allows you to "manually" launch the workflow
+
+jobs:
+  test:
+    name: Test ${{ matrix.python-version }}
+
+    runs-on: ubuntu-latest
+
+    # Here we will define the testing "matrix"
+    # -- It can be composed of whatever your matrix may be,
+    # -- including OS variations (e.g. windows, macos, etc).
+    # -- The executor will combine all possible values together
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9"]
+
+    # Here we define the steps to be undertaken for every test
+    # -- Each step does one action.  Code for the action sits in
+    # -- another github project (key "uses").  This way, actions
+    # -- can be programmed for any purpose.
+    steps:
+
+      # Action provided by GitHub to checkout code
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      # Action provided by "conda-incubator" to setup conda env
+      - name: Setup miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniconda-version: "latest"
+          python-version: ${{ matrix.python-version }}
+          auto-update-conda: true
+          auto-activate-base: false
+          activate-environment: site
+          environment-file: environment.yml
+
+      # Default action: run something
+      - name: Run tests
+        shell: bash -l {0}
+        run: |
+          conda info -a
+          nosetests -sv --with-coverage --cover-package=. test.py
+
+      # Action provided by "coverallsapp" to upload coverage
+      # results to coveralls.io
+      # N.B.: this action requires a "secret", that will be used
+      # to authenticate you to the coveralls.io website.
+      - name: Upload coverage results to Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
