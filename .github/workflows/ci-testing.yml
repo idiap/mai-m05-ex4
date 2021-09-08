@@ -49,11 +49,14 @@ jobs:
           pytest -sv --cov=. test.py
 
       - name: Upload coverage to coveralls.io
-        run: coveralls --service=github
+        shell: bash -l {0}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
           COVERALLS_PARALLEL: true
+        run: |
+          conda info -a
+          coveralls --service=github
 
   coveralls:
     name: Indicate completion to coveralls.io
